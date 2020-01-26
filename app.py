@@ -3,6 +3,7 @@ import sys
 
 from PyQt5 import QtCore
 from PyQt5 import QtGui
+from PyQt5.QtGui import QFont
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QBrush
 from PyQt5.QtGui import QColor
@@ -35,19 +36,27 @@ class Window(QMainWindow):
 
     def paintEvent(self, event):
         painter = QPainter(self)
+
         painter.setBrush(QBrush(QColor(0, 158, 220)))
         painter.drawRect(0, 0, self.width(), self.height())
+
         painter.setPen(QPen(Qt.black, PEN_SIZE, Qt.SolidLine))
+        painter.setFont(QFont("Monospaced", 55))
         X0 = self.width()/2
         Y0 = self.height()/2
+
+        NUMBER_WIDTH, NUMBER_HEIGHT = [.75 * TILE_RADIUS] * 2
 
         for row in self.game.board.grid:
             for tile in row:
                 if tile:
                     x = X0 + DX_DHEXX * tile.hex_x + DX_DHEXY * tile.hex_y
-                    y = Y0 + DY_DHEXX * tile.hex_x + DY_DHEXY * tile.hex_y
+                    y = Y0 + DY_DHEXX * tile.hex_x - DY_DHEXY * tile.hex_y
                     painter.setBrush(QBrush(QColor(*tile.RGB)))
                     painter.drawPolygon(self.make_polygon(6, x, y, TILE_RADIUS, TILE_ROTATION))
+                    if tile.number is not None:
+                        painter.drawEllipse(x - NUMBER_WIDTH / 2, y - NUMBER_HEIGHT / 2, NUMBER_WIDTH, NUMBER_HEIGHT)
+                        painter.drawText(x - NUMBER_WIDTH / 2, y - NUMBER_HEIGHT / 2, NUMBER_WIDTH, NUMBER_HEIGHT, Qt.AlignCenter, str(tile.number))
 
     def mousePressEvent(self, e):
         self.game = Game()
