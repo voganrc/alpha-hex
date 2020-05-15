@@ -12,20 +12,33 @@ class Resource(Enum):
     WOOL = 4
 
 
+class Vertex:
+
+    def __init__(self):
+        self.building = None
+
+        self.n_tile = None
+        self.sw_tile = None
+        self.se_tile = None
+
+        self.s_tile = None
+        self.nw_tile = None
+        self.ne_tile = None
+
+
 class Tile(ABC):
 
     @abstractmethod
     def __init__(self, hex_x: int, hex_y: int) -> None:
-        self._hex_x = hex_x
-        self._hex_y = hex_y
+        self.hex_x = hex_x
+        self.hex_y = hex_y
 
-    @property
-    def hex_x(self) -> int:
-        return self._hex_x
-
-    @property
-    def hex_y(self) -> int:
-        return self._hex_y
+        self.nw_vertex = None
+        self.n_vertex = None
+        self.ne_vertex = None
+        self.sw_vertex = None
+        self.s_vertex = None
+        self.se_vertex = None
 
 
 class HillsTile(Tile):
