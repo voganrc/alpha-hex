@@ -1,6 +1,5 @@
 from abc import ABC
 from abc import abstractmethod
-from typing import Optional
 from enum import Enum
 
 
@@ -42,7 +41,6 @@ class Tile(ABC):
 
 
 class HillsTile(Tile):
-
     COUNT = 3
     RGB = (193, 67, 55)
     RESOURCE = Resource.BRICK
@@ -52,7 +50,6 @@ class HillsTile(Tile):
 
 
 class ForestTile(Tile):
-
     COUNT = 4
     RGB = (39, 110, 52)
     RESOURCE = Resource.LUMBER
@@ -62,7 +59,6 @@ class ForestTile(Tile):
 
 
 class MountainsTile(Tile):
-
     COUNT = 3
     RGB = (181, 182, 184)
     RESOURCE = Resource.ORE
@@ -72,7 +68,6 @@ class MountainsTile(Tile):
 
 
 class FieldsTile(Tile):
-
     COUNT = 4
     RGB = (254, 215, 59)
     RESOURCE = Resource.GRAIN
@@ -82,7 +77,6 @@ class FieldsTile(Tile):
 
 
 class PastureTile(Tile):
-
     COUNT = 4
     RGB = (159, 199, 70)
     RESOURCE = Resource.WOOL
@@ -92,7 +86,6 @@ class PastureTile(Tile):
 
 
 class DesertTile(Tile):
-
     COUNT = 1
     RGB = (248, 199, 96)
     RESOURCE = None
