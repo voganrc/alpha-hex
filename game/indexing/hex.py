@@ -25,6 +25,7 @@
 #                \____/                                                    #
 #                                                                          #
 # ======================================================================== #
+from game.indexing.base import Grid
 
 
 class Hex:
@@ -36,7 +37,7 @@ class Hex:
         self.robber = None
 
 
-class HexGrid:
+class HexGrid(Grid):
     N_ROWS = 5
     N_COLS = 5
     INDICES = [
@@ -55,6 +56,8 @@ class HexGrid:
                     self.hexes.append(Hex(row, col))
 
     def hex_for_rc(self, row, col):
+        if not HexGrid.in_bounds(row, col):
+            return None
         idx = HexGrid.INDICES[row][col]
         if idx is None:
             return None

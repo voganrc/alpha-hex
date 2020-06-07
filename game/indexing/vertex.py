@@ -25,6 +25,7 @@
 #                47\__48/                                                                                       #
 #                                                                                                               #
 # ============================================================================================================= #
+from game.indexing.base import Grid
 
 
 class Vertex:
@@ -34,13 +35,10 @@ class Vertex:
 
     @property
     def points_up(self):
-        if self.row < VertexGrid.N_ROWS // 2:
-            return self.col % 2 == 1
-        else:
-            return self.col % 2 == 0
+        return self.col % 2 == 1
 
 
-class VertexGrid:
+class VertexGrid(Grid):
     N_ROWS = 6
     N_COLS = 12
     INDICES = [
@@ -60,6 +58,8 @@ class VertexGrid:
                     self.vertices.append(Vertex(row, col))
 
     def vertex_for_rc(self, row, col):
+        if not VertexGrid.in_bounds(row, col):
+            return None
         idx = VertexGrid.INDICES[row][col]
         if idx is None:
             return None
@@ -72,6 +72,6 @@ class VertexGrid:
         for d_row in range(2):
             for d_col in range(3):
                 vertex_row = vertex_row_above + d_row
-                vertex_col = vertex_col_left + d_col
+                vertex_col = vertex_col_left + d_row + d_col
                 vertices.append(self.vertex_for_rc(vertex_row, vertex_col))
         return [vertex for vertex in vertices if vertex]
