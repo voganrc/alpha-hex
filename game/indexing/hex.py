@@ -33,8 +33,6 @@ class Hex:
     def __init__(self, row, col):
         self.row = row
         self.col = col
-        self.tile = None
-        self.robber = None
 
 
 class HexGrid(Grid):
@@ -49,19 +47,15 @@ class HexGrid(Grid):
     ]
 
     def __init__(self):
-        self.hexes = []
+        self._elements = []
         for row in range(HexGrid.N_ROWS):
             for col in range(HexGrid.N_COLS):
                 if HexGrid.INDICES[row][col] is not None:
-                    self.hexes.append(Hex(row, col))
+                    self._elements.append(Hex(row, col))
 
-    def hex_for_rc(self, row, col):
-        if not HexGrid.in_bounds(row, col):
-            return None
-        idx = HexGrid.INDICES[row][col]
-        if idx is None:
-            return None
-        return self.hexes[idx]
+    @property
+    def elements(self):
+        return self._elements
 
     def hexes_for_vertex(self, vertex):
         hex_row_above = vertex.row - 1
@@ -70,11 +64,11 @@ class HexGrid(Grid):
         hex_col_right = vertex.col // 2
         hexes = []
         if vertex.points_up:
-            hexes.append(self.hex_for_rc(hex_row_above, hex_col_left))
-            hexes.append(self.hex_for_rc(hex_row_above, hex_col_right))
-            hexes.append(self.hex_for_rc(hex_row_below, hex_col_right))
+            hexes.append(self.get(hex_row_above, hex_col_left))
+            hexes.append(self.get(hex_row_above, hex_col_right))
+            hexes.append(self.get(hex_row_below, hex_col_right))
         else:
-            hexes.append(self.hex_for_rc(hex_row_above, hex_col_left))
-            hexes.append(self.hex_for_rc(hex_row_below, hex_col_left))
-            hexes.append(self.hex_for_rc(hex_row_below, hex_col_right))
+            hexes.append(self.get(hex_row_above, hex_col_left))
+            hexes.append(self.get(hex_row_below, hex_col_left))
+            hexes.append(self.get(hex_row_below, hex_col_right))
         return [hex_ for hex_ in hexes if hex_]
