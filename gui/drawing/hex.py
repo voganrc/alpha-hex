@@ -5,14 +5,16 @@ from PyQt5.QtGui import QPainter, QBrush
 
 from game.indexing.hex import HexGrid
 from gui.drawing.polygons import regular_polygon
-from gui.drawing.tile import TILE_RADIUS, TILE_ROTATION
 
 
 class HexDrawingMixin:
-    DX_DHexCol = math.sqrt(3) * TILE_RADIUS
+    HEX_RADIUS = 100
+    HEX_ROTATION = 90
+
+    DX_DHexCol = math.sqrt(3) * HEX_RADIUS
     DY_DHexCol = 0
     DX_DHexRow = - DX_DHexCol / 2
-    DY_DHexRow = 1.5 * TILE_RADIUS
+    DY_DHexRow = 1.5 * HEX_RADIUS
 
     def get_hex_center(self, hex_):
         center_x, center_y = self.center
@@ -27,7 +29,8 @@ class HexDrawingMixin:
 
     def get_hex_polygon(self, hex_):
         hex_x, hex_y = self.get_hex_center(hex_)
-        return regular_polygon(n_sides=6, x=hex_x, y=hex_y, radius=TILE_RADIUS, theta_0=TILE_ROTATION)
+        return regular_polygon(n_sides=6, x=hex_x, y=hex_y, radius=HexDrawingMixin.HEX_RADIUS,
+                               theta_0=HexDrawingMixin.HEX_ROTATION)
 
     def draw_hex(self, hex_):
         hexagon = self.get_hex_polygon(hex_)

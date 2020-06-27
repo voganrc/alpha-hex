@@ -1,3 +1,4 @@
+from gui.drawing.edge import EdgeDrawingMixin
 from gui.drawing.hex import HexDrawingMixin
 from gui.drawing.vertex import VertexDrawingMixin
 
@@ -16,5 +17,6 @@ class Drawing:
 class DrawingMixin(
     HexDrawingMixin,
     VertexDrawingMixin,
+    EdgeDrawingMixin,
 ):
     pass

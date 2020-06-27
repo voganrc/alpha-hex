@@ -35,7 +35,7 @@ class Edge:
         self.row = row
         self.col = col
 
-    def is_vertical(self):
+    def points_up(self):
         return self.row % 2 == 1 and self.col % 2 == 0
 
 
@@ -43,29 +43,25 @@ class EdgeGrid(Grid):
     N_ROWS = 11
     N_COLS = 11
     INDICES = [
-        0, 1, 2, 3, 4, 5, None, None, None, None, None,
-        6, None, 7, None, 8, None, 9, None, None, None, None,
-        10, 11, 12, 13, 14, 15, 16, 17, None, None, None,
-        18, None, 19, None, 20, None, 21, None, 22, None, None,
-        23, 24, 25, 26, 27, 28, 29, 30, 31, 32, None,
-        33, None, 34, None, 35, None, 36, None, 37, None, 38,
-        None, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
-        None, None, 49, None, 50, None, 51, None, 52, None, 53,
-        None, None, None, 54, 55, 56, 57, 58, 59, 60, 61,
-        None, None, None, None, 62, None, 63, None, 64, None, 65,
-        None, None, None, None, None, 66, 67, 68, 69, 70, 71,
+        [0, 1, 2, 3, 4, 5, None, None, None, None, None],
+        [6, None, 7, None, 8, None, 9, None, None, None, None],
+        [10, 11, 12, 13, 14, 15, 16, 17, None, None, None],
+        [18, None, 19, None, 20, None, 21, None, 22, None, None],
+        [23, 24, 25, 26, 27, 28, 29, 30, 31, 32, None],
+        [33, None, 34, None, 35, None, 36, None, 37, None, 38],
+        [None, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48],
+        [None, None, 49, None, 50, None, 51, None, 52, None, 53],
+        [None, None, None, 54, 55, 56, 57, 58, 59, 60, 61],
+        [None, None, None, None, 62, None, 63, None, 64, None, 65],
+        [None, None, None, None, None, 66, 67, 68, 69, 70, 71],
     ]
 
     def __init__(self):
-        self._elements = []
+        self.elements = []
         for row in range(EdgeGrid.N_ROWS):
             for col in range(EdgeGrid.N_COLS):
                 if EdgeGrid.INDICES[row][col] is not None:
-                    self._elements.append(Edge(row, col))
-
-    @property
-    def elements(self):
-        return self._elements
+                    self.elements.append(Edge(row, col))
 
     def edges_for_vertex(self, vertex):
         edge_row_center = vertex.row * 2

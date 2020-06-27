@@ -1,12 +1,13 @@
 from PyQt5.QtWidgets import QMainWindow
 
+from game.indexing.edge import EdgeGrid
 from game.indexing.hex import HexGrid
 from game.indexing.vertex import VertexGrid
 from gui.drawing.base import Drawing, DrawingMixin
-from gui.mouse import MousePositionMixin
+from gui.mouse import MouseMixin
 
 
-class Window(QMainWindow, DrawingMixin, MousePositionMixin):
+class Window(QMainWindow, DrawingMixin, MouseMixin):
 
     def __init__(self):
         super().__init__()
@@ -21,6 +22,7 @@ class Window(QMainWindow, DrawingMixin, MousePositionMixin):
 
         self.hex_grid = HexGrid()
         self.vertex_grid = VertexGrid()
+        self.edge_grid = EdgeGrid()
 
     @property
     def center(self):
@@ -31,16 +33,12 @@ class Window(QMainWindow, DrawingMixin, MousePositionMixin):
         return self.mouse_x, self.mouse_y
 
     def mousePressEvent(self, event):
-        clicked_vertex = self.moused_vertex()
-        clicked_hex = self.moused_hex()
-        if clicked_vertex:
-            for adjacent_hex in self.hex_grid.hexes_for_vertex(clicked_vertex):
-                self.click_drawings.append(Drawing(self.draw_selected_hex, [adjacent_hex]))
-            self.click_drawings.append(Drawing(self.draw_selected_vertex, [clicked_vertex]))
-        elif clicked_hex:
-            self.click_drawings.append(Drawing(self.draw_selected_hex, [clicked_hex]))
-            for adjacent_vertex in self.vertex_grid.vertices_for_hex(clicked_hex):
-                self.click_drawings.append(Drawing(self.draw_selected_vertex, [adjacent_vertex]))
+        if self.handle_vertex_click():
+            pass
+        elif self.handle_edge_click():
+            pass
+        else:
+            self.handle_hex_click()
         self.update()
 
     def mouseReleaseEvent(self, event):
@@ -51,21 +49,26 @@ class Window(QMainWindow, DrawingMixin, MousePositionMixin):
         self.mouse_x, self.mouse_y = event.x(), event.y()
         self.update()
 
-    def paintEvent(self, event):
-        for drawing in self.click_drawings + self.move_drawings():
-            drawing.apply()
-        for hex_ in self.hex_grid.hexes:
-            self.draw_hex(hex_)
-        for vertex in self.vertex_grid.vertices:
-            self.draw_vertex(vertex)
-
     def move_drawings(self):
         drawings = []
         if not self.click_drawings and self.mouse_x and self.mouse_y:
-            moused_vertex = self.moused_vertex()
             moused_hex = self.moused_hex()
+            moused_vertex = self.moused_vertex()
+            moused_edge = self.moused_edge()
             if moused_vertex:
                 drawings.append(Drawing(self.draw_selected_vertex, [moused_vertex]))
+            elif moused_edge:
+                drawings.append(Drawing(self.draw_selected_edge, [moused_edge]))
             elif moused_hex:
                 drawings.append(Drawing(self.draw_selected_hex, [moused_hex]))
         return drawings
+
+    def paintEvent(self, event):
+        for drawing in self.click_drawings + self.move_drawings():
+            drawing.apply()
+        for hex_ in self.hex_grid.elements:
+            self.draw_hex(hex_)
+        for vertex in self.vertex_grid.elements:
+            self.draw_vertex(vertex)
+        for edge in self.edge_grid.elements:
+            self.draw_edge(edge)

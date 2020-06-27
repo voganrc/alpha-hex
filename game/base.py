@@ -1,12 +1,7 @@
-from gui.base import Gui
-
-
 class Game:
 
-    def __init__(self, attach_gui=True):
-        self.gui = None
-        if attach_gui:
-            self.gui = Gui()
+    def __init__(self, gui=None):
+        self.gui = gui
 
     def start(self):
         if self.gui:

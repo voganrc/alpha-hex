@@ -10,15 +10,10 @@ class Grid(ABC):
     def __init__(self):
         raise NotImplementedError
 
-    @property
-    @abstractmethod
-    def elements(self):
-        raise NotImplementedError
-
     def get(self, row, col):
-        if not Grid.in_bounds(row, col):
+        if not self.__class__.in_bounds(row, col):
             return None
-        idx = Grid.INDICES[row][col]
+        idx = self.__class__.INDICES[row][col]
         if idx is None:
             return None
         return self.elements[idx]

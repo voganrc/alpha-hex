@@ -51,15 +51,11 @@ class VertexGrid(Grid):
     ]
 
     def __init__(self):
-        self._elements = []
+        self.elements = []
         for row in range(VertexGrid.N_ROWS):
             for col in range(VertexGrid.N_COLS):
                 if VertexGrid.INDICES[row][col] is not None:
-                    self._elements.append(Vertex(row, col))
-
-    @property
-    def elements(self):
-        return self._elements
+                    self.elements.append(Vertex(row, col))
 
     def vertices_for_hex(self, hex_):
         vertex_row_above = hex_.row

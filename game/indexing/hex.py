@@ -47,15 +47,11 @@ class HexGrid(Grid):
     ]
 
     def __init__(self):
-        self._elements = []
+        self.elements = []
         for row in range(HexGrid.N_ROWS):
             for col in range(HexGrid.N_COLS):
                 if HexGrid.INDICES[row][col] is not None:
-                    self._elements.append(Hex(row, col))
-
-    @property
-    def elements(self):
-        return self._elements
+                    self.elements.append(Hex(row, col))
 
     def hexes_for_vertex(self, vertex):
         hex_row_above = vertex.row - 1
