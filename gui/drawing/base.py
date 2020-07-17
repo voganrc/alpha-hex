@@ -1,6 +1,6 @@
-from gui.drawing.edge import EdgeDrawingMixin
-from gui.drawing.hex import HexDrawingMixin
-from gui.drawing.vertex import VertexDrawingMixin
+from gui.drawing.indexing.edge import EdgeDrawingMixin
+from gui.drawing.indexing.hex import HexDrawingMixin
+from gui.drawing.indexing.vertex import VertexDrawingMixin
 
 
 class Drawing:

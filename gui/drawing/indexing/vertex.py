@@ -4,7 +4,7 @@ from PyQt5.QtCore import QPointF, Qt
 from PyQt5.QtGui import QPainter, QBrush
 
 from game.indexing.vertex import VertexGrid
-from gui.drawing.hex import HexDrawingMixin
+from gui.drawing.indexing.hex import HexDrawingMixin
 
 
 class VertexDrawingMixin:

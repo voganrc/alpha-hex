@@ -1,7 +1,7 @@
 from pandas.tests.extension.numpy_.test_numpy_nested import np
 
 from gui.drawing.base import Drawing
-from gui.drawing.vertex import VertexDrawingMixin
+from gui.drawing.indexing.vertex import VertexDrawingMixin
 
 
 class VertexMouseMixin:

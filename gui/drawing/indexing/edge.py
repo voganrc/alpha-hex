@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainter, QBrush
 
 from game.indexing.edge import EdgeGrid
-from gui.drawing.hex import HexDrawingMixin
+from gui.drawing.indexing.hex import HexDrawingMixin
 from gui.drawing.polygons import rotated_rectangle
 
 
