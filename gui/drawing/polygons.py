@@ -13,3 +13,16 @@ def regular_polygon(n_sides, x, y, radius, theta_0):
         vertex_y = y + radius * math.sin(math.radians(theta_i))
         polygon.append(QPointF(vertex_x, vertex_y))
     return polygon
+
+
+def rotated_rectangle(x, y, w, h, theta_0):
+    polygon = QPolygonF()
+    dx_w = math.cos(math.radians(theta_0)) * w / 2
+    dy_w = math.sin(math.radians(theta_0)) * w / 2
+    dx_h = math.sin(math.radians(theta_0)) * h / 2
+    dy_h = math.cos(math.radians(theta_0)) * h / 2
+    polygon.append(QPointF(x + dx_w - dx_h, y - dy_w - dy_h))
+    polygon.append(QPointF(x - dx_w - dx_h, y + dy_w - dy_h))
+    polygon.append(QPointF(x - dx_w + dx_h, y + dy_w + dy_h))
+    polygon.append(QPointF(x + dx_w + dx_h, y - dy_w + dy_h))
+    return polygon

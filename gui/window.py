@@ -4,7 +4,7 @@ from game.indexing.edge import EdgeGrid
 from game.indexing.hex import HexGrid
 from game.indexing.vertex import VertexGrid
 from gui.drawing.base import Drawing, DrawingMixin
-from gui.mouse import MouseMixin
+from gui.mouse.base import MouseMixin
 
 
 class Window(QMainWindow, DrawingMixin, MouseMixin):

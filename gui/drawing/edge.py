@@ -1,10 +1,11 @@
 import math
 
-from PyQt5.QtCore import QPointF, Qt
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPainter, QBrush
 
 from game.indexing.edge import EdgeGrid
 from gui.drawing.hex import HexDrawingMixin
+from gui.drawing.polygons import rotated_rectangle
 
 
 class EdgeDrawingMixin:
@@ -28,21 +29,26 @@ class EdgeDrawingMixin:
 
         return center_edge_x + dx, center_edge_y + dy
 
-    def draw_edge(self, edge):
+    def get_edge_orientation(self, edge):
+        if edge.row % 2 == 1:
+            return 90
+        elif edge.col % 2 == 0:
+            return 30
+        else:
+            return 150
+
+    def get_edge_polygon(self, edge):
         edge_x, edge_y = self.get_edge_center(edge)
+        edge_theta = self.get_edge_orientation(edge)
+        return rotated_rectangle(x=edge_x, y=edge_y, w=60, h=15, theta_0=edge_theta)
+
+    def draw_edge(self, edge):
+        rectangle = self.get_edge_polygon(edge)
         painter = QPainter(self)
-        painter.drawEllipse(
-            QPointF(edge_x, edge_y),
-            EdgeDrawingMixin.EDGE_RADIUS,
-            EdgeDrawingMixin.EDGE_RADIUS
-        )
+        painter.drawPolygon(rectangle)
 
     def draw_selected_edge(self, edge):
-        edge_x, edge_y = self.get_edge_center(edge)
+        rectangle = self.get_edge_polygon(edge)
         painter = QPainter(self)
         painter.setBrush(QBrush(Qt.black))
-        painter.drawEllipse(
-            QPointF(edge_x, edge_y),
-            EdgeDrawingMixin.EDGE_RADIUS,
-            EdgeDrawingMixin.EDGE_RADIUS
-        )
+        painter.drawPolygon(rectangle)
