@@ -1,8 +1,7 @@
 import sys
 
 from game.base import Game
-from gui.base import Gui
 
 if __name__ == "__main__":
-    game = Game(gui=Gui())
+    game = Game(gui=True)
     sys.exit(game.start())

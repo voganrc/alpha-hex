@@ -25,6 +25,8 @@
 #                \____/                                                    #
 #                                                                          #
 # ======================================================================== #
+from typing import List
+
 from game.indexing.base import Grid
 
 
@@ -33,6 +35,7 @@ class Hex:
     def __init__(self, row, col):
         self.row = row
         self.col = col
+        self.tile = None
 
 
 class HexGrid(Grid):
@@ -68,3 +71,33 @@ class HexGrid(Grid):
             hexes.append(self.get(hex_row_below, hex_col_left))
             hexes.append(self.get(hex_row_below, hex_col_right))
         return [hex_ for hex_ in hexes if hex_]
+
+    def spiral_traversal(self, layer=None) -> List[Hex]:
+        """counter-clockwise"""
+
+        SPIRAL_STEPS = [
+            (+1, +0),  # step down
+            (+1, +1),  # step down-right
+            (+0, +1),  # step right
+            (-1, +0),  # step up
+            (-1, -1),  # step up-left
+            (+0, -1),  # step left
+        ]
+
+        if layer is None:
+            layer = HexGrid.N_ROWS // 2
+        elif layer < 0:
+            return []
+
+        start_coords = tuple([HexGrid.N_ROWS // 2 - layer]) * 2
+        traversal = [self.get(*start_coords)]
+
+        for d_row, d_col in SPIRAL_STEPS:
+            for i in range(layer):
+                prev_row, prev_col = traversal[-1].row, traversal[-1].col
+                traversal.append(self.get(prev_row + d_row, prev_col + d_col))
+
+        if layer > 0:
+            traversal.pop(-1)
+
+        return traversal + self.spiral_traversal(layer - 1)
