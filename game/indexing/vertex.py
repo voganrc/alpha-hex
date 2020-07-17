@@ -70,7 +70,7 @@ class VertexGrid(Grid):
 
     def vertices_for_edge(self, edge):
         vertex_row_first = edge.row // 2
-        vertex_row_second = edge.row // 2 + 1 if edge.points_up else edge.row // 2
+        vertex_row_second = edge.row // 2 + 1 if edge.is_vertical else edge.row // 2
         vertex_col_first = edge.col
         vertex_col_second = edge.col + 1
         return [

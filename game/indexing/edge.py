@@ -35,7 +35,8 @@ class Edge:
         self.row = row
         self.col = col
 
-    def points_up(self):
+    @property
+    def is_vertical(self):
         return self.row % 2 == 1 and self.col % 2 == 0
 
 
