@@ -15,12 +15,13 @@ class MouseMixin(
         return self.mouse_x, self.mouse_y
 
     def mousePressEvent(self, event):
-        if self.handle_vertex_click():
-            pass
-        elif self.handle_edge_click():
-            pass
-        else:
-            self.handle_hex_click()
+        # if self.handle_vertex_click():
+        #     pass
+        # elif self.handle_edge_click():
+        #     pass
+        # else:
+        #     self.handle_hex_click()
+        self.gui.new_game()
         self.update()
 
     def mouseReleaseEvent(self, event):

@@ -6,10 +6,11 @@ from gui.mouse.base import MouseMixin
 
 class Window(QMainWindow, DrawingMixin, MouseMixin):
 
-    def __init__(self, game):
+    def __init__(self, gui):
         super().__init__()
 
-        self.game = game
+        self.gui = gui
+        self.game = None
 
         self.setWindowTitle("Semaphores of Catan")
         self.showMaximized()
@@ -18,8 +19,6 @@ class Window(QMainWindow, DrawingMixin, MouseMixin):
         self.mouse_x = None
         self.mouse_y = None
         self.mouse_click_drawings = []
-
-        self.draw_board()
 
     @property
     def center(self):
