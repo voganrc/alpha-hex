@@ -1,8 +1,10 @@
+import itertools
 import random
 
 from game.indexing.edge import EdgeGrid
 from game.indexing.hex import HexGrid
 from game.indexing.vertex import VertexGrid
+from game.phase import Phase
 from game.pieces.tile import Tile, DesertTile
 
 
@@ -30,3 +32,21 @@ class Board:
             else:
                 hex_.tile.number = Board.DEFAULT_NUMBER_ORDER[number_idx]
                 number_idx += 1
+
+    def legal_vertices(self, player, phase):
+        if phase == Phase.SET_UP:
+            illegal_vertices = set()
+            for vertex in self.vertex_grid.elements:
+                if vertex.building:
+                    illegal_vertices.update(self.neighbors(vertex))
+            legal_vertices = set(self.vertex_grid.elements).difference(illegal_vertices)
+            return VertexGrid.sort(legal_vertices)
+
+        else:
+            raise NotImplementedError
+
+    def neighbors(self, vertex):
+        return set(itertools.chain.from_iterable(
+            self.vertex_grid.vertices_for_edge(edge)
+            for edge in self.edge_grid.edges_for_vertex(vertex)
+        ))

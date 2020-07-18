@@ -1,5 +1,6 @@
 from PyQt5.QtGui import QColor
 
+from game.pieces.settlement import Settlement
 from gui.drawing.indexing.base import IndexDrawingMixin
 from gui.drawing.pieces.base import PieceDrawingMixin
 
@@ -25,6 +26,9 @@ class DrawingMixin(
         self.draw_water()
         for hex_ in self.game.board.hex_grid.elements:
             self.draw_tile(hex_.tile)
+        for vertex in self.game.board.vertex_grid.elements:
+            if vertex.building and isinstance(vertex.building, Settlement):
+                self.draw_settlement(vertex.building)
 
     def draw_water(self):
         p = self.palette()

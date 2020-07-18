@@ -26,3 +26,13 @@ def rotated_rectangle(x, y, w, h, theta_0):
     polygon.append(QPointF(x - dx_w + dx_h, y + dy_w + dy_h))
     polygon.append(QPointF(x + dx_w + dx_h, y - dy_w + dy_h))
     return polygon
+
+
+def settlement_polygon(center_x, center_y, side_len):
+    polygon = QPolygonF()
+    polygon.append(QPointF(center_x + side_len / 2, center_y + side_len / 2))
+    polygon.append(QPointF(center_x + side_len / 2, center_y - side_len / 5))
+    polygon.append(QPointF(center_x, center_y - 7 * side_len / 10))
+    polygon.append(QPointF(center_x - side_len / 2, center_y - side_len / 5))
+    polygon.append(QPointF(center_x - side_len / 2, center_y + side_len / 2))
+    return polygon

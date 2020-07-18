@@ -12,6 +12,7 @@ class Gui:
 
     def new_game(self):
         self.window.game = Game()
+        self.window.game.start()
 
     def start(self):
         self.application.exec()

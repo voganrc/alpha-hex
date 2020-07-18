@@ -26,16 +26,24 @@
 #                                                                                                               #
 # ============================================================================================================= #
 from game.indexing.base import Grid
+from game.pieces.settlement import Settlement
 
 
 class Vertex:
     def __init__(self, row, col):
         self.row = row
         self.col = col
+        self.building = None
 
     @property
     def points_up(self):
         return self.col % 2 == 1
+
+    def settle(self, player):
+        if self.building:
+            raise ValueError("Vertex already settled")
+        else:
+            self.building = Settlement(self, player)
 
 
 class VertexGrid(Grid):
@@ -77,3 +85,7 @@ class VertexGrid(Grid):
             self.get(vertex_row_first, vertex_col_first),
             self.get(vertex_row_second, vertex_col_second),
         ]
+
+    @staticmethod
+    def sort(vertices):
+        return sorted(vertices, key=lambda vertex: VertexGrid.INDICES[vertex.row][vertex.col])
