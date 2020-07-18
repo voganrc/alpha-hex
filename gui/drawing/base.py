@@ -1,6 +1,7 @@
-from gui.drawing.indexing.edge import EdgeDrawingMixin
-from gui.drawing.indexing.hex import HexDrawingMixin
-from gui.drawing.indexing.vertex import VertexDrawingMixin
+from PyQt5.QtGui import QColor
+
+from gui.drawing.indexing.base import IndexDrawingMixin
+from gui.drawing.pieces.base import PieceDrawingMixin
 
 
 class Drawing:
@@ -15,8 +16,17 @@ class Drawing:
 
 
 class DrawingMixin(
-    HexDrawingMixin,
-    VertexDrawingMixin,
-    EdgeDrawingMixin,
+    IndexDrawingMixin,
+    PieceDrawingMixin,
 ):
-    pass
+    WATER_RGB = (81, 182, 232)
+
+    def draw_board(self):
+        self.draw_water()
+        for hex_ in self.game.board.hex_grid.elements:
+            self.draw_tile(hex_.tile)
+
+    def draw_water(self):
+        p = self.palette()
+        p.setColor(self.backgroundRole(), QColor(*DrawingMixin.WATER_RGB))
+        self.setPalette(p)
