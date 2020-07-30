@@ -26,7 +26,6 @@
 #                                                                                                               #
 # ============================================================================================================= #
 from game.indexing.base import Grid
-from game.pieces.settlement import Settlement
 
 
 class Vertex:
@@ -38,12 +37,6 @@ class Vertex:
     @property
     def points_up(self):
         return self.col % 2 == 1
-
-    def settle(self, player):
-        if self.building:
-            raise ValueError("Vertex already settled")
-        else:
-            self.building = Settlement(self, player)
 
 
 class VertexGrid(Grid):

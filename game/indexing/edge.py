@@ -34,6 +34,7 @@ class Edge:
     def __init__(self, row, col):
         self.row = row
         self.col = col
+        self.road = None
 
     @property
     def is_vertical(self):

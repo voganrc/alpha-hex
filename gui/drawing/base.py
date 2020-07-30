@@ -26,6 +26,9 @@ class DrawingMixin(
         self.draw_water()
         for hex_ in self.game.board.hex_grid.elements:
             self.draw_tile(hex_.tile)
+        for edge in self.game.board.edge_grid.elements:
+            if edge.road:
+                self.draw_road(edge.road)
         for vertex in self.game.board.vertex_grid.elements:
             if vertex.building and isinstance(vertex.building, Settlement):
                 self.draw_settlement(vertex.building)

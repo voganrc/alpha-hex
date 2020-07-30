@@ -11,7 +11,8 @@ from game.pieces.tile import Tile, DesertTile
 class Board:
     DEFAULT_NUMBER_ORDER = [5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 3, 11]
 
-    def __init__(self):
+    def __init__(self, game):
+        self.game = game
         self.hex_grid = HexGrid()
         self.vertex_grid = VertexGrid()
         self.edge_grid = EdgeGrid()
@@ -33,20 +34,42 @@ class Board:
                 hex_.tile.number = Board.DEFAULT_NUMBER_ORDER[number_idx]
                 number_idx += 1
 
-    def legal_vertices(self, player, phase):
-        if phase == Phase.SET_UP:
-            illegal_vertices = set()
-            for vertex in self.vertex_grid.elements:
-                if vertex.building:
-                    illegal_vertices.update(self.neighbors(vertex))
-            legal_vertices = set(self.vertex_grid.elements).difference(illegal_vertices)
-            return VertexGrid.sort(legal_vertices)
-
+    def legal_vertices(self, player):
+        if self.game.phase == Phase.SET_UP:
+            legal_vertex_set = self._vertices_with_no_adjacent_settlements()
         else:
-            raise NotImplementedError
+            legal_vertex_set = self._vertices_with_no_adjacent_settlements() & self._vertices_connected_to_roads(player)
+        return VertexGrid.sort(legal_vertex_set)
 
-    def neighbors(self, vertex):
+    def legal_edges(self, player):
+        legal_edges = []
+        accessible_vertices = set(
+            vertex for vertex in self._vertices_connected_to_roads(player)
+            if vertex.building is None or vertex.building.player == player
+        )
+        for edge in self.edge_grid.elements:
+            if edge.road is None:
+                adjacent_vertices = self.vertex_grid.vertices_for_edge(edge)
+                if any(vertex in accessible_vertices for vertex in adjacent_vertices):
+                    legal_edges.append(edge)
+        return legal_edges
+
+    def _vertices_with_no_adjacent_settlements(self):
+        illegal_vertices = set()
+        for vertex in self.vertex_grid.elements:
+            if vertex.building is not None:
+                illegal_vertices.update(self._vertex_neighborhood(vertex))
+        legal_vertices = set(self.vertex_grid.elements) - illegal_vertices
+        return legal_vertices
+
+    def _vertices_connected_to_roads(self, player):
+        owned_edges = [edge for edge in self.edge_grid.elements if edge.road and edge.road.player == player]
+        return set(itertools.chain.from_iterable(
+            self.vertex_grid.vertices_for_edge(edge) for edge in owned_edges
+        ))
+
+    def _vertex_neighborhood(self, center_vertex):
         return set(itertools.chain.from_iterable(
             self.vertex_grid.vertices_for_edge(edge)
-            for edge in self.edge_grid.edges_for_vertex(vertex)
+            for edge in self.edge_grid.edges_for_vertex(center_vertex)
         ))

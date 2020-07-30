@@ -7,12 +7,8 @@ from gui.window import Window
 class Gui:
 
     def __init__(self):
-        self.application = QApplication([])
-        self.window = Window(self)
-
-    def new_game(self):
-        self.window.game = Game()
-        self.window.game.start()
+        self.app = QApplication([])
+        self.window = Window(self, Game())
 
     def start(self):
-        self.application.exec()
+        self.app.exec_()
