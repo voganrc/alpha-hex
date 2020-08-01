@@ -7,7 +7,6 @@ class Tile(ABC):
 
     def __init__(self, hex_) -> None:
         self.hex_ = hex_
-        self.number = None
 
 
 class HillsTile(Tile):

@@ -36,6 +36,7 @@ class Hex:
         self.row = row
         self.col = col
         self.tile = None
+        self.number = None
 
 
 class HexGrid(Grid):

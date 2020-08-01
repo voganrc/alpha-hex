@@ -1,5 +1,6 @@
 import itertools
 import random
+from collections import defaultdict
 
 from game.indexing.edge import EdgeGrid
 from game.indexing.hex import HexGrid
@@ -16,6 +17,7 @@ class Board:
         self.hex_grid = HexGrid()
         self.vertex_grid = VertexGrid()
         self.edge_grid = EdgeGrid()
+        self.hexes_for_number = defaultdict(list)
 
         tile_order = []
         for tile_cls in Tile.__subclasses__():
@@ -29,10 +31,18 @@ class Board:
         spiral_traversal = self.hex_grid.spiral_traversal()
         for hex_ in spiral_traversal:
             if isinstance(hex_.tile, DesertTile):
-                hex_.tile.number = None
+                hex_.number = 7
             else:
-                hex_.tile.number = Board.DEFAULT_NUMBER_ORDER[number_idx]
+                hex_.number = Board.DEFAULT_NUMBER_ORDER[number_idx]
                 number_idx += 1
+            self.hexes_for_number[hex_.number].append(hex_)
+
+    def handle_roll(self, dice_sum):
+        activated_hexes = self.hexes_for_number[dice_sum]
+        for activated_hex in activated_hexes:
+            activated_vertices = self.vertex_grid.vertices_for_hex(activated_hex)
+            activated_buildings = [vertex.building for vertex in activated_vertices if vertex.building]
+            map(lambda building: building.pay(activated_hex.tile.RESOURCE), activated_buildings)
 
     def legal_vertices(self, player):
         if self.game.phase == Phase.SET_UP:

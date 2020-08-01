@@ -26,6 +26,7 @@ class DrawingMixin(
         self.draw_water()
         for hex_ in self.game.board.hex_grid.elements:
             self.draw_tile(hex_.tile)
+            self.draw_number(hex_)
         for edge in self.game.board.edge_grid.elements:
             if edge.road:
                 self.draw_road(edge.road)
