@@ -1,3 +1,4 @@
+from gui.drawing.pieces.dice import DiceDrawingMixin
 from gui.drawing.pieces.number import NumberDrawingMixin
 from gui.drawing.pieces.road import RoadDrawingMixin
 from gui.drawing.pieces.settlement import SettlementDrawingMixin
@@ -9,5 +10,6 @@ class PieceDrawingMixin(
     NumberDrawingMixin,
     SettlementDrawingMixin,
     RoadDrawingMixin,
+    DiceDrawingMixin,
 ):
     pass

@@ -24,6 +24,7 @@ class DrawingMixin(
 
     def draw_board(self):
         self.draw_water()
+        self.draw_dice(self.game.dice)
         for hex_ in self.game.board.hex_grid.elements:
             self.draw_tile(hex_.tile)
             self.draw_number(hex_)

@@ -1,21 +1,20 @@
 from itertools import islice
-from random import randint
 
 from game.board import Board
 from game.phase import Phase
+from game.pieces.dice import Dice
 from game.player.action import EndTurnAction
 from game.player.base import Color, Player
 
 
 class Game:
-    POINTS_TO_WIN = 10
+    POINTS_TO_WIN = 6
 
     def __init__(self, num_players=2):
         self.board = Board(self)
         self.players = [Player(self, color) for color in islice(Color, num_players)]
         self.phase = Phase.SET_UP
-        self.dice_rolled = False
-        self.dice_sum = None
+        self.dice = Dice()
         self.last_action = None
         self.turn = 0
 
@@ -35,8 +34,9 @@ class Game:
     def advance(self):
         if self.phase == Phase.COMPLETED:
             return
-        elif self.phase == Phase.PLAY and not self.dice_rolled:
-            self.roll_dice()
+        elif self.phase == Phase.PLAY and not self.dice.rolled:
+            self.board.handle_roll(self.dice.roll())
+            return
         self.active_player.take_action()
         self.maybe_update_phase()
         self.maybe_update_turn()
@@ -44,15 +44,10 @@ class Game:
     def maybe_update_phase(self):
         if self.turn == 2 * len(self.players) - 1 and isinstance(self.last_action, EndTurnAction):
             self.phase = Phase.PLAY
-        elif self.phase == Phase.PLAY and len(self.active_player._legal_play_actions()) == 0:
+        elif self.active_player.victory_points >= Game.POINTS_TO_WIN:
             self.phase = Phase.COMPLETED
 
     def maybe_update_turn(self):
         if isinstance(self.last_action, EndTurnAction):
             self.turn += 1
-            self.dice_rolled = False
-
-    def roll_dice(self):
-        self.dice_sum = randint(1, 6) + randint(1, 6)
-        self.board.handle_roll(self.dice_sum)
-        self.dice_rolled = True
+            self.dice.update_turn()

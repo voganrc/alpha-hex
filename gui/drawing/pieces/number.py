@@ -23,4 +23,4 @@ class NumberDrawingMixin:
         painter.drawEllipse(bounding_box)
 
     def _format_number(self, number):
-        return str(number) if number is not None else 'X'
+        return 'X' if number == 7 else str(number)

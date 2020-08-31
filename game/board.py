@@ -37,12 +37,13 @@ class Board:
                 number_idx += 1
             self.hexes_for_number[hex_.number].append(hex_)
 
-    def handle_roll(self, dice_sum):
-        activated_hexes = self.hexes_for_number[dice_sum]
+    def handle_roll(self, dice):
+        activated_hexes = self.hexes_for_number[dice.sum]
         for activated_hex in activated_hexes:
             activated_vertices = self.vertex_grid.vertices_for_hex(activated_hex)
             activated_buildings = [vertex.building for vertex in activated_vertices if vertex.building]
-            map(lambda building: building.pay(activated_hex.tile.RESOURCE), activated_buildings)
+            for activated_building in activated_buildings:
+                activated_building.pay(activated_hex.tile.RESOURCE)
 
     def legal_vertices(self, player):
         if self.game.phase == Phase.SET_UP:

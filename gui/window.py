@@ -8,7 +8,7 @@ from gui.mouse.base import MouseMixin
 
 
 class Window(QMainWindow, DrawingMixin, MouseMixin):
-    MOVE_INTERVAL_MS = 30
+    MOVE_INTERVAL_MS = 200
 
     def __init__(self, gui, game):
         super().__init__()
