@@ -1,1 +1,3 @@
-# semaphores-of-catan
+# AlphaHex
+
+AI Settlers of Catan
